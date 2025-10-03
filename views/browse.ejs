@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse All Cleansers</title>
+    <link rel="stylesheet" href="Stylesheets/browse.css"> 
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Palate Cleanser</h1>
+            <div>
+                <a href="/" class="nav-button primary">Random Generator</a>
+                <% if (user) { %>
+                    <a href="/favorites" class="nav-button">Favorites</a>
+                    <form action="/logout" method="POST" style="display:inline;">
+                        <button type="submit" class="nav-button">Logout (<%= user.username %>)</button>
+                    </form>
+                <% } else { %>
+                    <a href="/login" class="nav-button">Login</a>
+                    <a href="/register" class="nav-button">Register</a>
+                <% } %>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>All Available Palate Cleansers (<%= tracks.length %> Total)</h2>
+        
+        <div class="favorites-list">
+            <% if (tracks.length === 0) { %>
+                <p class="empty-message">No tracks have been added yet!</p>
+            <% } else { %>
+                <% tracks.forEach(track => { %>
+                    <% 
+                        let isFavorited = false;
+                        if (user && user.favorites) {
+                            // Convert ObjectId to string for reliable comparison
+                            isFavorited = user.favorites.some(fav => fav.toString() === track._id.toString());
+                        }
+                    %>
+
+                    <div class="favorite-item">
+                        <p class="track-title"><%= track.name %> by <%= track.artist %></p>
+                        <p class="track-genre">Genre: <%= track.genre %></p>
+                        
+                        <div class="media-player-small">
+                            <iframe 
+                                src="<%= track.embedUrl %>?autoplay=0" 
+                                frameborder="0" 
+                                allow="picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+
+                        <% if (user) { %>
+                            <div class="mt-4 action-buttons">
+                                <% if (isFavorited) { %>
+                                    <form action="/unfavorite/<%= track._id %>" method="POST" class="inline-form">
+                                        <button type="submit" class="main-button tertiary">
+                                            Unfavorite
+                                        </button>
+                                    </form>
+                                <% } else { %>
+                                    <form action="/favorite/<%= track._id %>" method="POST" class="inline-form">
+                                        <button type="submit" class="main-button secondary">
+                                            Save to Favorites
+                                        </button>
+                                    </form>
+                                <% } %>
+                                
+                                <form action="/delete/<%= track._id %>" method="POST" class="inline-form" onsubmit="return confirm('Are you sure you want to permanently delete this track from the entire pool?');">
+                                    <button type="submit" class="main-button danger">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        <% } %>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+        
+        <a href="/" class="main-button primary mt-4">Go Back to Generator</a>
+    </main>
+</body>
+</html>

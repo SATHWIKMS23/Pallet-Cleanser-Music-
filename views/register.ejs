@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="/Stylesheets/reister.css">
+</head>
+<body>
+    <main class="container form-container">
+        <h2>Create New Account</h2>
+        
+        <% if (typeof error !== 'undefined' && error.length > 0) { %>
+            <p class="error-message"><%= error %></p>
+        <% } %>
+        
+        <form action="/register" method="POST">
+            <input type="text" name="username" placeholder="Choose Username" required><br>
+            <input type="password" name="password" placeholder="Choose Password (min 6 chars)" required><br>
+            <button type="submit" class="main-button primary">Register</button>
+        </form>
+        <p class="mt-4">Already have an account? <a href="/login">Login here</a></p>
+    </main>
+</body>
+</html>

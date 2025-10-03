@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Favorites</title>
+    <link rel="stylesheet" href="/Stylesheets/favorites.css">
+</head>
+<body>
+    <main class="container">
+        <h2><%= user.username %>'s Palate Cleanser Favorites</h2>
+        <a href="/">Back to Generator</a>
+
+        <% if (tracks.length === 0) { %>
+            <p>You haven't saved any palate cleansers yet!</p>
+        <% } else { %>
+            <div class="favorites-list">
+                <% tracks.forEach(track => { %>
+                    <div class="favorite-item">
+                        <h3><%= track.name %> by <%= track.artist %></h3>
+                        <p>Genre: <%= track.genre %></p>
+                        <div class="media-player-small">
+                            <iframe src="<%= track.embedUrl %>" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </main>
+</body>
+</html>

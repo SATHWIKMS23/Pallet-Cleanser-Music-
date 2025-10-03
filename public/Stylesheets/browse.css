@@ -1,0 +1,283 @@
+/* ---------------------------------- */
+/* --- GLOBAL STYLES & RESET --- */
+/* ---------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --color-primary: #3b82f6;   /* Blue - Main Accent (Randomizer) */
+    --color-secondary: #10b981; /* Teal/Green - Save Button */
+    --color-tertiary: #f59e0b;  /* Amber/Orange - Unfavorite Button */
+    --color-danger: #ef4444;    /* Red for Delete */
+    --color-text: #1f2937;      
+    --color-background: #f4f6f8; 
+    --color-card-bg: #ffffff;   
+    --color-shadow: rgba(0, 0, 0, 0.1);
+    --color-modal-bg: rgba(0, 0, 0, 0.6);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* Used for centering forms on login/register pages */
+    align-items: center; 
+    justify-content: center;
+}
+
+/* ---------------------------------- */
+/* --- NAVIGATION & HEADER --- */
+/* ---------------------------------- */
+
+header {
+    background: var(--color-text);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%; /* Important for header to span full width */
+}
+
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h1 {
+    font-size: 1.6rem;
+    color: white;
+    font-weight: 700;
+}
+
+.nav-button {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-left: 10px;
+    transition: background-color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.nav-button.primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.nav-button:hover:not(.primary) {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ---------------------------------- */
+/* --- LAYOUT & CONTAINER --- */
+/* ---------------------------------- */
+
+.container {
+    max-width: 900px;
+    width: 90%;
+    margin: 30px auto;
+    padding: 30px;
+    background: var(--color-card-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 20px -5px var(--color-shadow);
+    text-align: center;
+    flex-grow: 1; 
+}
+
+/* Auth Pages Specific */
+.form-container {
+    padding: 40px;
+    margin: 0; 
+    max-width: 400px;
+}
+
+/* ---------------------------------- */
+/* --- BUTTONS & ACTIONS --- */
+/* ---------------------------------- */
+
+.main-button {
+    display: inline-block;
+    padding: 10px 18px; /* Slightly smaller padding for card buttons */
+    margin: 5px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    border: none;
+    font-size: 0.9rem;
+}
+
+/* Primary (Blue - Generator/Go Back) */
+.main-button.primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.main-button.primary:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+/* Secondary (Teal - Save/Add Cleanser) */
+.main-button.secondary {
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+.main-button.secondary:hover {
+    background-color: #059669;
+    transform: translateY(-1px);
+}
+
+/* Tertiary (Orange - Unfavorite) */
+.main-button.tertiary {
+    background-color: var(--color-tertiary);
+    color: white;
+}
+
+.main-button.tertiary:hover {
+    background-color: #d97706;
+    transform: translateY(-1px);
+}
+
+/* Danger (Red - Delete) */
+.main-button.danger {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.main-button.danger:hover {
+    background-color: #b91c1c;
+    transform: translateY(-1px);
+}
+
+/* Utility Class for button groups on cards */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 15px;
+}
+
+.inline-form {
+    display: inline-block;
+}
+
+/* ---------------------------------- */
+/* --- TEXT & INFO --- */
+/* ---------------------------------- */
+
+h2 {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.track-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-bottom: 5px;
+}
+.track-genre {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+/* ---------------------------------- */
+/* --- MEDIA PLAYERS --- */
+/* ---------------------------------- */
+
+.media-player {
+    width: 100%; 
+    max-width: 560px;
+    margin: 25px auto;
+    aspect-ratio: 16 / 9; 
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.media-player iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.media-player-small {
+    margin-top: 15px;
+    width: 100%;
+    aspect-ratio: 16 / 9; 
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.media-player-small iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+
+/* ---------------------------------- */
+/* --- LISTS (Browse/Favorites) --- */
+/* ---------------------------------- */
+
+.favorites-list {
+    /* Responsive Grid Layout for cards */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.favorite-item {
+    background: #fefefe;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.empty-message {
+    padding: 40px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* ---------------------------------- */
+/* --- UTILITIES --- */
+/* ---------------------------------- */
+
+.mt-4 {
+    margin-top: 20px;
+}
+.mb-4 {
+    margin-bottom: 20px;
+}   
+.text-left {
+    text-align: left;
+}
+.text-center {
+    text-align: center;
+}
+/* ---------------------------------- */
+/* --- MODAL STYLES --- */  

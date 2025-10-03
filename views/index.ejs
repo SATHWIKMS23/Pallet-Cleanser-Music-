@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palate Cleanser</title>
+    <!-- FIX: Use the standard '/style.css' path -->
+    <link rel="stylesheet" href="Stylesheets/style.css"> 
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Palate Cleanser</h1>
+            <div>
+                <% if (user) { %>
+                    <a href="/favorites" class="nav-button">Favorites</a>
+                    <form action="/logout" method="POST" style="display:inline;">
+                        <button type="submit" class="nav-button primary">Logout (<%= user.username %>)</button>
+                    </form>
+                <% } else { %>
+                    <a href="/login" class="nav-button">Login</a>
+                    <a href="/register" class="nav-button">Register</a>
+                <% } %>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Display general errors (Simplified) -->
+        <% if (error && error.length > 0) { %>
+            <p class="error-message"><%= error %></p>
+        <% } %>
+
+        <% if (track) { %>
+            <h2>Your Random Palate Cleanser:</h2>
+            <h3 class="track-info">
+                <%= track.name %> by <%= track.artist %> (<%= track.genre %>)
+            </h3>
+            
+            <div class="media-player">
+                <iframe 
+                    src="<%= track.embedUrl %>?autoplay=0" 
+                    title="Palate Cleanser Track"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="actions">
+                <!-- LINK TO BROWSE ALL SONGS -->
+                <a href="/browse" class="main-button primary">Browse All Songs (<%= tracksCount %> Total)</a>
+                
+                <% if (user) { %>
+                    <!-- Button to open the custom song modal (using ID hook) -->
+                    <button class="main-button secondary" id="openAddModal">Add a Cleanser</button>
+                    
+                    <form action="/favorite/<%= track._id %>" method="POST" style="display: inline;">
+                        <button type="submit" class="main-button secondary">
+                            Save to Favorites
+                        </button>
+                    </form>
+                <% } %>
+            </div>
+
+        <% } else { %>
+            <p class="empty-message">No tracks loaded yet. Please populate the database.</p>
+        <% } %>
+    </main>
+
+    <!-- CUSTOM SONG SUBMISSION MODAL -->
+    <% if (user) { %>
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <h3>Submit a Custom Palate Cleanser</h3>
+                <p class="small-text">Paste the standard YouTube URL. We'll convert it for you!</p>
+                
+                <form action="/add" method="POST" id="addTrackForm">
+                    <input type="text" name="name" placeholder="Track Name" required>
+                    <input type="text" name="artist" placeholder="Artist (Optional)">
+                    <input type="text" name="genre" placeholder="Genre (Optional)">
+                    <input type="url" name="embedUrl" placeholder="YouTube URL (Watch or Embed)" required id="youtubeUrlInput">
+                    
+                    <button type="submit" class="main-button primary">Submit New Cleanser</button>
+                    <!-- Button hook -->
+                    <button type="button" class="main-button secondary" id="closeAddModal">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            // Define the error state using EJS, making it safe for JS evaluation
+            const HAS_SUBMISSION_ERROR = "<%= (error && error.length > 0) ? 'true' : 'false' %>";
+
+            // Function to extract Video ID from various YouTube URLs
+            function getYouTubeVideoId(url) {
+                const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
+                const match = url.match(regExp);
+                return (match && match[2].length === 11) ? match[2] : null;
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = document.getElementById('addModal');
+                const openBtn = document.getElementById('openAddModal');
+                const closeBtn = document.getElementById('closeAddModal');
+                const form = document.getElementById('addTrackForm');
+                const urlInput = document.getElementById('youtubeUrlInput');
+
+                // Auto-Conversion Logic
+                form.addEventListener('submit', function(e) {
+                    const originalUrl = urlInput.value;
+                    const videoId = getYouTubeVideoId(originalUrl);
+                    
+                    // If a valid ID is found, replace the input value with the embed URL
+                    if (videoId) {
+                        urlInput.value = `https://www.youtube.com/embed/${videoId}`;
+                        return true; // Proceed with submission
+                    } else if (originalUrl.includes('youtube.com/embed/')) {
+                        return true; // Already a valid embed URL
+                    }
+                    
+                    // If neither case is met, prevent submission and show an alert
+                    e.preventDefault();
+                    // Using a message box instead of alert() as per instructions
+                    alert('Invalid YouTube URL. Please use a valid watch link or embed link.');
+                    return false;
+                });
+
+
+                // Modal UI Logic
+                if (openBtn) {
+                    openBtn.addEventListener('click', () => {
+                        modal.style.display = 'flex';
+                    });
+                }
+
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                    });
+                }
+                
+                // Handle closing the modal when clicking outside
+                window.onclick = function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
+                }
+
+                // If an error exists, show the modal immediately after page loads
+                if (HAS_SUBMISSION_ERROR) {
+                    setTimeout(() => {
+                        if (modal) modal.style.display = "flex";
+                    }, 50);
+                }
+            });
+        </script>
+    <% } %>
+</body>
+</html>
